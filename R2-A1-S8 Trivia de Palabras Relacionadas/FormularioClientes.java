@@ -7,6 +7,8 @@ public class FormularioClientes extends JFrame{
     private JButton botonAddCliente, botonVerCliente, botonSalir;
     private JTextArea zonaListaClientes;
 
+    private ListaClientes listaClientes = new ListaClientes();
+
 public FormularioClientes(){
 
     setTitle("Admin de Clientes");
@@ -34,22 +36,17 @@ public FormularioClientes(){
 
     botonVerCliente = new JButton("Ver Clientes");
     panelIngreso.add(botonVerCliente);
+    
+    botonSalir = new JButton("Salir");
+    panelIngreso.add(botonSalir);
 
     estiloBoton(botonAddCliente, new Color (161, 8, 161));
     estiloBoton(botonVerCliente, new Color (161, 8, 161));
-  
+    estiloBoton(botonSalir, new Color (161, 8, 161));
+
     zonaListaClientes = new JTextArea();
     zonaListaClientes.setEditable(false);
     JScrollPane scrollPane = new JScrollPane(zonaListaClientes);
-
-    botonSalir = new JButton("Salir");
-    estiloBoton(botonSalir, new Color (161, 8, 161));
-    panelIngreso.add(botonSalir);
-    botonSalir.addActionListener(new ActionListener(){
-        public void actionPerformed(ActionEvent e){
-            System.exit(0);
-        }
-    });
 
     JPanel panelSalir= new JPanel(new FlowLayout(FlowLayout.CENTER));
     panelSalir.setBackground(new Color(236, 201, 245));
@@ -59,6 +56,38 @@ public FormularioClientes(){
     add(panelIngreso,BorderLayout.NORTH);
     add(scrollPane,BorderLayout.CENTER);
     add(panelSalir,BorderLayout.SOUTH);
+
+    botonAddCliente.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        String cedula = ingresoCedula.getText().trim();
+        String nombre =ingresoNombre.getText().trim();
+
+        if(!cedula.isEmpty() && !nombre.isEmpty()){
+            Cliente nuevoCliente = new Cliente(cedula, nombre);
+            listaClientes.insertarOrdenado(nuevoCliente);
+            ingresoCedula.setText("");
+            ingresoNombre.setText("");
+            JOptionPane.showMessageDialog(null, "Cliente añadido correctamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese la informacion");
+        }
+    }
+    });
+
+    botonVerCliente.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e){
+            zonaListaClientes.setText(listaClientes.listar());
+        }
+    });
+
+    botonSalir.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+            System.exit(0);
+        }
+    });
+
+
 }
 private void estiloBoton(JButton boton,Color colorFondo){
     boton.setFocusPainted(false);
