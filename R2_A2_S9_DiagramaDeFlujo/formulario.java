@@ -4,14 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class formulario extends JFrame{
+public class Formulario extends JFrame{
     private JTextField ingresoCedula,ingresoNombre;
     private JButton botonAddCliente, botonDerecha, botonIzquierda, botonSalir;
     private JTextArea zonaListaClientes;
+    private ListaClientes listaClientes;
 
 
+    public Formulario(){
 
-    public formulario(){
+        listaClientes = new ListaClientes();
+
         setTitle("Gestion clientes");
         setSize(550, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,7 +71,11 @@ public class formulario extends JFrame{
         add(panelSuperior, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(panelSalir, BorderLayout.SOUTH); 
-        
+
+        botonAddCliente.addActionListener(e->agregarCliente());
+        botonDerecha.addActionListener(e->listarDerecha());
+        botonIzquierda.addActionListener(e->listarIzquierda());
+        botonSalir.addActionListener(e->System.exit(0));
     }
     private void aplicarEstiloBoton(JButton boton,Color colorFondo){
 
@@ -80,5 +87,30 @@ public class formulario extends JFrame{
         boton.setOpaque(true);
     }
 
+  
+    private void agregarCliente() {
+        String cedula = ingresoCedula.getText();
+        String nombre = ingresoNombre.getText();
+
+        if (cedula.isEmpty() || nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos.");
+        } else {
+            Cliente nuevoCliente = new Cliente(cedula, nombre);
+            listaClientes.insertarOrdenado(nuevoCliente);
+            JOptionPane.showMessageDialog(this, "Cliente agregado exitosamente.");
+        }
+    }
+
+   
+    private void listarDerecha() {
+        String clientes = listaClientes.listar();
+        zonaListaClientes.setText(clientes);
+    }
+
+    
+    private void listarIzquierda() {
+        String clientes = listaClientes.listarInvertido();
+        zonaListaClientes.setText(clientes);
+    }
 
 }
