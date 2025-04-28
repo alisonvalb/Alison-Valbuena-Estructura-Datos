@@ -1,5 +1,4 @@
-package R2_A2_S9_DiagramaDeFlujo;
-
+package R2_A2_S9_DiagramaDeFlujo.modelo;
 
 public class Nodo {
     private Cliente cliente;

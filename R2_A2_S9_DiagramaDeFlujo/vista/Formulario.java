@@ -1,19 +1,21 @@
-package R2_A2_S9_DiagramaDeFlujo;
+package R2_A2_S9_DiagramaDeFlujo.vista;
 
 import javax.swing.*;
+
+import R2_A2_S9_DiagramaDeFlujo.Controlador.ControladorClientes;
 import java.awt.*;
 
-
+/** Clase Formulario - interfaz gráfica para la gestión de clientes. */
 public class Formulario extends JFrame{
     private JTextField ingresoCedula,ingresoNombre;
     private JButton botonAddCliente, botonDerecha, botonIzquierda, botonSalir;
     private JTextArea zonaListaClientes;
-    private ListaClientes listaClientes;
+    private ControladorClientes controlador;
 
 
     public Formulario(){
 
-        listaClientes = new ListaClientes();
+        controlador = new ControladorClientes();
 
         setTitle("Gestion clientes");
         setSize(550, 450);
@@ -95,22 +97,22 @@ public class Formulario extends JFrame{
         if (cedula.isEmpty() || nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos.");
         } else {
-            Cliente nuevoCliente = new Cliente(cedula, nombre);
-            listaClientes.insertarOrdenado(nuevoCliente);
+       
+        controlador.agregarClientes(cedula, nombre);
             JOptionPane.showMessageDialog(this, "Cliente agregado exitosamente.");
         }
     }
 
    
     private void listarDerecha() {
-        String clientes = listaClientes.listar();
-        zonaListaClientes.setText(clientes);
+    
+        zonaListaClientes.setText(controlador.listarDerecha());
     }
 
     
     private void listarIzquierda() {
-        String clientes = listaClientes.listarInvertido();
-        zonaListaClientes.setText(clientes);
+
+        zonaListaClientes.setText(controlador.listarIzquierda());
     }
 
 }

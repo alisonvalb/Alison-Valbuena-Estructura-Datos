@@ -1,4 +1,4 @@
-package R2_A2_S9_DiagramaDeFlujo;
+package R2_A2_S9_DiagramaDeFlujo.modelo;
 
 public class ListaClientes {
     private Nodo inicial;
@@ -11,29 +11,32 @@ public class ListaClientes {
     
     public void insertarOrdenado(Cliente nuevoCliente) {
         Nodo nuevoNodo = new Nodo(nuevoCliente);
-
-        if (inicial == null || nuevoCliente.getCedula().compareTo(inicial.getCliente().getCedula()) < 0) {
+        Long cedulaNueva = Long.parseLong(nuevoCliente.getCedula());
+    
+        if (inicial == null || cedulaNueva < Long.parseLong(inicial.getCliente().getCedula())) {
             nuevoNodo.setSiguiente(inicial);
             if (inicial != null) {
-                inicial.setAnterior(nuevoNodo); 
+                inicial.setAnterior(nuevoNodo);
             }
             inicial = nuevoNodo;
         } else {
             Nodo actual = inicial;
             while (actual.getSiguiente() != null &&
-                   nuevoCliente.getCedula().compareTo(actual.getSiguiente().getCliente().getCedula()) > 0) {
+                   cedulaNueva > Long.parseLong(actual.getSiguiente().getCliente().getCedula())) {
                 actual = actual.getSiguiente();
             }
-
+    
             nuevoNodo.setSiguiente(actual.getSiguiente());
-            nuevoNodo.setAnterior(actual); 
+            nuevoNodo.setAnterior(actual);
             actual.setSiguiente(nuevoNodo);
-
+    
             if (nuevoNodo.getSiguiente() != null) {
-                nuevoNodo.getSiguiente().setAnterior(nuevoNodo); 
+                nuevoNodo.getSiguiente().setAnterior(nuevoNodo);
             }
         }
     }
+    
+    
 
     public String listar() {
         if (inicial == null) {
