@@ -1,29 +1,30 @@
 package R2_A2_S9_DiagramaDeFlujo;
 
-public class Cliente{
-
+public class Cliente {
     private String cedula, nombre;
 
-    public Cliente (String cedula, String nombre){
-   
-    this.cedula = cedula;
-    this.nombre = nombre;
-
+    public Cliente(String cedula, String nombre) {
+        this.cedula = cedula;
+        this.nombre = nombre;
     }
 
-
-    public String getCedula(){
-    return cedula;
+    public String getCedula() {
+        return cedula;
     }
 
-
-    public String getNombre(){
-    return nombre;
+    public String getNombre() {
+        return nombre;
     }
 
+    // Método para convertir la cédula en un número, rellenando con ceros a la izquierda si es necesario
+    public long getCedulaNumerica() {
+        // Convertir la cédula en un número, eliminando ceros a la izquierda
+        return Long.parseLong(cedula);
+    }
 
-
-     public String toString(){
-    return "Cedula:" + cedula + "  " + "Nombre:" + nombre;
+    @Override
+    public String toString() {
+        return "Cedula: " + cedula + "  Nombre: " + nombre;
     }
 }
+

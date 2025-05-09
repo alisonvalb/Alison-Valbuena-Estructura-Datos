@@ -4,19 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class Formulario extends JFrame{
-    private JTextField ingresoCedula,ingresoNombre;
+public class formulario extends JFrame {
+    private JTextField ingresoCedula, ingresoNombre;
     private JButton botonAddCliente, botonDerecha, botonIzquierda, botonSalir;
+    private JButton botonSinOrden, botonBurbuja, botonQuicksort, botonSecuencial;
     private JTextArea zonaListaClientes;
     private ListaClientes listaClientes;
 
 
-    public Formulario(){
+    public formulario(){
 
         listaClientes = new ListaClientes();
 
         setTitle("Gestion clientes");
-        setSize(550, 450);
+        setSize(600, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -41,16 +42,30 @@ public class Formulario extends JFrame{
         botonAddCliente = new JButton("Agregar Cliente");
         botonDerecha = new JButton("Listar Derecha");
         botonIzquierda = new JButton("Listar Izquierda");
+        botonSinOrden = new JButton("Listar sin orden");
+        botonBurbuja = new JButton("Ordenar Burbuja");
+        botonQuicksort = new JButton("Ordenar Quicksort");
+        botonSecuencial = new JButton("Ordenar Secuencial");
+
 
         
         Color colorBotones = new Color(0, 40, 99);
         aplicarEstiloBoton(botonAddCliente, colorBotones);
         aplicarEstiloBoton(botonDerecha, colorBotones);
         aplicarEstiloBoton(botonIzquierda, colorBotones);
+        aplicarEstiloBoton(botonSinOrden, colorBotones);
+        aplicarEstiloBoton(botonBurbuja, colorBotones);
+        aplicarEstiloBoton(botonQuicksort, colorBotones);
+        aplicarEstiloBoton(botonSecuencial, colorBotones);
 
         panelBotonesAccion.add(botonAddCliente);
         panelBotonesAccion.add(botonDerecha);
         panelBotonesAccion.add(botonIzquierda);
+        panelBotonesAccion.add(botonSinOrden);
+        panelBotonesAccion.add(botonBurbuja);
+        panelBotonesAccion.add(botonQuicksort);
+        panelBotonesAccion.add(botonSecuencial);
+
 
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setBackground(new Color(170, 202, 250));
@@ -75,6 +90,10 @@ public class Formulario extends JFrame{
         botonAddCliente.addActionListener(e->agregarCliente());
         botonDerecha.addActionListener(e->listarDerecha());
         botonIzquierda.addActionListener(e->listarIzquierda());
+        botonSinOrden.addActionListener(e -> listarSinOrden());
+        botonBurbuja.addActionListener(e -> ordenarBurbuja());
+        botonQuicksort.addActionListener(e -> ordenarQuicksort());
+        botonSecuencial.addActionListener(e -> ordenarSecuencial());
         botonSalir.addActionListener(e->System.exit(0));
     }
     private void aplicarEstiloBoton(JButton boton,Color colorFondo){
@@ -113,4 +132,21 @@ public class Formulario extends JFrame{
         zonaListaClientes.setText(clientes);
     }
 
+    private void listarSinOrden() {
+        String clientes = listaClientes.listarSinOrden();
+        zonaListaClientes.setText(clientes);
+    }
+    
+    private void ordenarBurbuja() {
+        zonaListaClientes.setText(listaClientes.ordenarBurbuja());
+    }
+
+    private void ordenarQuicksort() {
+        zonaListaClientes.setText(listaClientes.ordenarQuicksort());
+    }
+
+    private void ordenarSecuencial() {
+        zonaListaClientes.setText(listaClientes.ordenarSecuencial());
+    }
 }
+
