@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class Formulario extends JFrame{
+public class formulario extends JFrame{
     private JTextField ingresoCedula,ingresoNombre;
     private JButton botonAddCliente, botonDerecha, botonIzquierda, botonSalir;
     private JTextArea zonaListaClientes;
     private ListaClientes listaClientes;
 
 
-    public Formulario(){
+    public formulario(){
 
         listaClientes = new ListaClientes();
 

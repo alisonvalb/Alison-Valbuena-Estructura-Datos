@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Torres de Hanoi Visual</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .tower {
+            min-height: 250px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding-top: 10px;
+            background-color: #ffffff;
+            position: relative;
+
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .disk {
+            height: 20px;
+            margin: 3.5px auto;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+
+        .peg-label {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container py-4">
+        <h2 class="text-center mb-4"> Torres de Hanoi - Visualizador</h2>
+        <div class="text-center mb-3">
+            <label for="numDiscos" class="form-label">Número de discos:</label>
+            <input type="number" id="numDiscos" class="form-control d-inline-block w-auto mx-2" value="0" min="1"
+                max="10">
+            <button class="btn btn-primary" onclick="iniciar()">Iniciar</button>
+        </div>
+
+        <div class="row text-center">
+            <div class="col">
+                <div class="tower" id="A"></div>
+                <div class="peg-label">Torre A</div>
+            </div>
+            <div class="col">
+                <div class="tower" id="B"></div>
+                <div class="peg-label">Torre B</div>
+            </div>
+            <div class="col">
+                <div class="tower" id="C"></div>
+                <div class="peg-label">Torre C</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let moves = [];
+        let delay = 600;
+
+        function crearDiscos(n) {
+            const torre = document.getElementById('A');
+            torre.innerHTML = '';
+            for (let i = n; i >= 1; i--) {
+                const disco = document.createElement('div');
+                disco.classList.add('disk', `disk-${i}`);
+                disco.style.width = `${i * 25}px`;
+                disco.style.backgroundColor = `hsl(${i * 40}, 70%, 60%)`;
+                torre.appendChild(disco);
+            }
+            document.getElementById('B').innerHTML = '';
+            document.getElementById('C').innerHTML = '';
+        }
+
+        function hanoi(n, origen, destino, auxiliar) {
+            if (n === 1) {
+                moves.push([origen, destino]);
+            } else {
+                hanoi(n - 1, origen, auxiliar, destino);
+                moves.push([origen, destino]);
+                hanoi(n - 1, auxiliar, destino, origen);
+            }
+        }
+
+        function moverDisco(from, to) {
+            const torreOrigen = document.getElementById(from);
+            const torreDestino = document.getElementById(to);
+            const disco = torreOrigen.lastElementChild;
+            if (disco) {
+                torreDestino.appendChild(disco);
+            }
+        }
+
+        function reproducirPasos(i = 0) {
+            if (i >= moves.length) return;
+            const [from, to] = moves[i];
+            moverDisco(from, to);
+            setTimeout(() => reproducirPasos(i + 1), delay);
+        }
+
+        function iniciar() {
+            const n = parseInt(document.getElementById('numDiscos').value);
+            if (n < 1 || n > 10) {
+                alert("Elige entre 1 y 10 discos por simplicidad visual.");
+                return;
+            }
+            moves = [];
+            crearDiscos(n);
+            hanoi(n, 'A', 'C', 'B');
+            setTimeout(() => reproducirPasos(), 1000);
+        }
+    </script>
+
+</body>
+
+</html>
