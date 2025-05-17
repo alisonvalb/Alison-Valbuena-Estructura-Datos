@@ -3,82 +3,95 @@ package R2_A2_S9_DiagramaDeFlujo;
 import javax.swing.*;
 import java.awt.*;
 
-
-public class Formulario extends JFrame{
-    private JTextField ingresoCedula,ingresoNombre;
-    private JButton botonAddCliente, botonDerecha, botonIzquierda, botonSalir;
+public class formulario extends JFrame {
+    private JTextField ingresoCedula, ingresoNombre;
+    private JButton botonInsertarIzquierda, botonInsertarDerecha;
+    private JButton botonAtenderIzquierda, botonAtenderDerecha;
+    private JButton botonListar;
+    private JButton botonSalir;
     private JTextArea zonaListaClientes;
     private ListaClientes listaClientes;
 
-
-    public Formulario(){
-
+    public formulario() {
         listaClientes = new ListaClientes();
 
-        setTitle("Gestion clientes");
-        setSize(550, 450);
+        setTitle("Gestión clientes");
+        setSize(550, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        getContentPane().setBackground(new Color (170,202,250));
+        getContentPane().setBackground(new Color(170, 202, 250));
 
-        JPanel panelIngreso = new JPanel(new GridLayout(4,2,5,5));
+        // Panel para ingreso datos
+        JPanel panelIngreso = new JPanel(new GridLayout(4, 2, 5, 5));
         panelIngreso.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelIngreso.setBackground(new Color(170,202,250));
-    
-        panelIngreso.add(new JLabel("ingrese numero de cedula:"));
+        panelIngreso.setBackground(new Color(170, 202, 250));
+
+        panelIngreso.add(new JLabel("Ingrese número de cédula:"));
         ingresoCedula = new JTextField();
         panelIngreso.add(ingresoCedula);
 
-        panelIngreso.add(new JLabel("ingrese nombre:"));
+        panelIngreso.add(new JLabel("Ingrese nombre:"));
         ingresoNombre = new JTextField();
         panelIngreso.add(ingresoNombre);
 
-        JPanel panelBotonesAccion = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        panelBotonesAccion.setBackground(new Color(170, 202, 250));
-          
-        botonAddCliente = new JButton("Agregar Cliente");
-        botonDerecha = new JButton("Listar Derecha");
-        botonIzquierda = new JButton("Listar Izquierda");
+        // Panel botones bicola (sin salir)
+        JPanel panelBicola = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panelBicola.setBackground(new Color(170, 202, 250));
 
-        
+        botonInsertarIzquierda = new JButton("Insertar Izquierda");
+        botonInsertarDerecha = new JButton("Insertar Derecha");
+        botonAtenderIzquierda = new JButton("Atender Izquierda");
+        botonAtenderDerecha = new JButton("Atender Derecha");
+        botonListar = new JButton("Listar");
+
         Color colorBotones = new Color(0, 40, 99);
-        aplicarEstiloBoton(botonAddCliente, colorBotones);
-        aplicarEstiloBoton(botonDerecha, colorBotones);
-        aplicarEstiloBoton(botonIzquierda, colorBotones);
+        aplicarEstiloBoton(botonInsertarIzquierda, colorBotones);
+        aplicarEstiloBoton(botonInsertarDerecha, colorBotones);
+        aplicarEstiloBoton(botonAtenderIzquierda, colorBotones);
+        aplicarEstiloBoton(botonAtenderDerecha, colorBotones);
+        aplicarEstiloBoton(botonListar, colorBotones);
 
-        panelBotonesAccion.add(botonAddCliente);
-        panelBotonesAccion.add(botonDerecha);
-        panelBotonesAccion.add(botonIzquierda);
+        panelBicola.add(botonInsertarIzquierda);
+        panelBicola.add(botonInsertarDerecha);
+        panelBicola.add(botonAtenderIzquierda);
+        panelBicola.add(botonAtenderDerecha);
+        panelBicola.add(botonListar);
 
-        JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setBackground(new Color(170, 202, 250));
-        panelSuperior.add(panelIngreso, BorderLayout.CENTER);
-        panelSuperior.add(panelBotonesAccion, BorderLayout.SOUTH);
-
+        // Área de texto para mostrar lista
         zonaListaClientes = new JTextArea();
         zonaListaClientes.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(zonaListaClientes);
 
+        // Panel central: botones arriba y área texto centro
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.setBackground(new Color(170, 202, 250));
+        panelCentral.add(panelBicola, BorderLayout.NORTH);
+        panelCentral.add(scrollPane, BorderLayout.CENTER);
+
+        // Panel para el botón salir solo abajo
         JPanel panelSalir = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelSalir.setBackground(new Color(170, 202, 250));
-
-      botonSalir = new JButton("Salir");
+        botonSalir = new JButton("Salir");
         aplicarEstiloBoton(botonSalir, colorBotones);
         panelSalir.add(botonSalir);
 
-        add(panelSuperior, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        add(panelSalir, BorderLayout.SOUTH); 
+        // Agregar componentes al JFrame
+        add(panelIngreso, BorderLayout.NORTH);
+        add(panelCentral, BorderLayout.CENTER);
+        add(panelSalir, BorderLayout.SOUTH);
 
-        botonAddCliente.addActionListener(e->agregarCliente());
-        botonDerecha.addActionListener(e->listarDerecha());
-        botonIzquierda.addActionListener(e->listarIzquierda());
-        botonSalir.addActionListener(e->System.exit(0));
+        // Eventos
+        botonInsertarIzquierda.addActionListener(e -> insertarIzquierda());
+        botonInsertarDerecha.addActionListener(e -> insertarDerecha());
+        botonAtenderIzquierda.addActionListener(e -> atenderIzquierda());
+        botonAtenderDerecha.addActionListener(e -> atenderDerecha());
+        botonListar.addActionListener(e -> listar());
+        botonSalir.addActionListener(e -> System.exit(0));
     }
-    private void aplicarEstiloBoton(JButton boton,Color colorFondo){
 
+    private void aplicarEstiloBoton(JButton boton, Color colorFondo) {
         boton.setFocusPainted(false);
         boton.setBorderPainted(false);
         boton.setContentAreaFilled(true);
@@ -87,30 +100,57 @@ public class Formulario extends JFrame{
         boton.setOpaque(true);
     }
 
-  
-    private void agregarCliente() {
-        String cedula = ingresoCedula.getText();
-        String nombre = ingresoNombre.getText();
-
+    private void insertarIzquierda() {
+        String cedula = ingresoCedula.getText().trim();
+        String nombre = ingresoNombre.getText().trim();
         if (cedula.isEmpty() || nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos.");
+            return;
+        }
+        Cliente nuevoCliente = new Cliente(cedula, nombre);
+        listaClientes.insertarPorIzquierda(nuevoCliente);
+        JOptionPane.showMessageDialog(this, "Cliente insertado por la izquierda.");
+        limpiarCampos();
+    }
+
+    private void insertarDerecha() {
+        String cedula = ingresoCedula.getText().trim();
+        String nombre = ingresoNombre.getText().trim();
+        if (cedula.isEmpty() || nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese todos los datos.");
+            return;
+        }
+        Cliente nuevoCliente = new Cliente(cedula, nombre);
+        listaClientes.insertarPorDerecha(nuevoCliente);
+        JOptionPane.showMessageDialog(this, "Cliente insertado por la derecha.");
+        limpiarCampos();
+    }
+
+    private void atenderIzquierda() {
+        Cliente atendido = listaClientes.atenderPorIzquierda();
+        if (atendido != null) {
+            JOptionPane.showMessageDialog(this, "Atendido (izquierda): " + atendido.toString());
         } else {
-            Cliente nuevoCliente = new Cliente(cedula, nombre);
-            listaClientes.insertarOrdenado(nuevoCliente);
-            JOptionPane.showMessageDialog(this, "Cliente agregado exitosamente.");
+            JOptionPane.showMessageDialog(this, "No hay clientes por atender.");
         }
     }
 
-   
-    private void listarDerecha() {
-        String clientes = listaClientes.listar();
-        zonaListaClientes.setText(clientes);
+    private void atenderDerecha() {
+        Cliente atendido = listaClientes.atenderPorDerecha();
+        if (atendido != null) {
+            JOptionPane.showMessageDialog(this, "Atendido (derecha): " + atendido.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay clientes por atender.");
+        }
     }
 
-    
-    private void listarIzquierda() {
-        String clientes = listaClientes.listarInvertido();
-        zonaListaClientes.setText(clientes);
+    private void listar() {
+        String listado = listaClientes.listar();
+        zonaListaClientes.setText(listado);
     }
 
+    private void limpiarCampos() {
+        ingresoCedula.setText("");
+        ingresoNombre.setText("");
+    }
 }
