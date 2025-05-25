@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Árbol Binario Ordenado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fbe9f0;
+      font-family: 'Montserrat', sans-serif;
+      padding-top: 50px;
+    }
+    h1, h2 {
+      color: #a65d8d;
+    }
+    .btn-custom {
+      background-color: #d9a7c7;
+      border-color: #c48fb7;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #c48fb7;
+      color: white;
+    }
+    #arbolCanvas {
+      border: 1px solid #cba1bd;
+      background-color: #fff3f9;
+    }
+  </style>
+</head>
+<body>
+<div class="container text-center">
+  <h1 class="mb-4">Árbol Binario Ordenado</h1>
+  <div class="mb-3">
+    <input id="dato" class="form-control d-inline w-25" type="number" placeholder="Ingrese un número">
+    <button class="btn btn-custom" onclick="insertar()">Insertar</button>
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-outline-secondary" onclick="mostrar('in')">InOrden</button>
+    <button class="btn btn-outline-secondary" onclick="mostrar('pre')">PreOrden</button>
+    <button class="btn btn-outline-secondary" onclick="mostrar('post')">PostOrden</button>
+  </div>
+  <p><strong>Recorrido:</strong> <span id="resultado"></span></p>
+  <h2>Visualización del árbol</h2>
+  <canvas id="arbolCanvas" width="600" height="400"></canvas>
+</div>
+
+<script>
+class Nodo {
+  constructor(valor) {
+    this.valor = valor;
+    this.izquierda = null;
+    this.derecha = null;
+  }
+}
+
+class ArbolBinario {
+  constructor() {
+    this.raiz = null;
+  }
+
+  insertar(valor) {
+    const nuevo = new Nodo(valor);
+    if (!this.raiz) {
+      this.raiz = nuevo;
+    } else {
+      this._insertarRec(this.raiz, nuevo);
+    }
+    dibujar();
+  }
+
+  _insertarRec(nodo, nuevo) {
+    if (nuevo.valor < nodo.valor) {
+      if (!nodo.izquierda) nodo.izquierda = nuevo;
+      else this._insertarRec(nodo.izquierda, nuevo);
+    } else {
+      if (!nodo.derecha) nodo.derecha = nuevo;
+      else this._insertarRec(nodo.derecha, nuevo);
+    }
+  }
+
+  inOrden() {
+    const res = [];
+    const recorrer = nodo => {
+      if (nodo) {
+        recorrer(nodo.izquierda);
+        res.push(nodo.valor);
+        recorrer(nodo.derecha);
+      }
+    };
+    recorrer(this.raiz);
+    return res;
+  }
+
+  preOrden() {
+    const res = [];
+    const recorrer = nodo => {
+      if (nodo) {
+        res.push(nodo.valor);
+        recorrer(nodo.izquierda);
+        recorrer(nodo.derecha);
+      }
+    };
+    recorrer(this.raiz);
+    return res;
+  }
+
+  postOrden() {
+    const res = [];
+    const recorrer = nodo => {
+      if (nodo) {
+        recorrer(nodo.izquierda);
+        recorrer(nodo.derecha);
+        res.push(nodo.valor);
+      }
+    };
+    recorrer(this.raiz);
+    return res;
+  }
+}
+
+const arbol = new ArbolBinario();
+const input = document.getElementById("dato");
+const resultado = document.getElementById("resultado");
+const canvas = document.getElementById("arbolCanvas");
+const ctx = canvas.getContext("2d");
+
+function insertar() {
+  const valor = parseInt(input.value);
+  if (!isNaN(valor)) {
+    arbol.insertar(valor);
+    input.value = "";
+    input.focus();
+  }
+}
+
+function mostrar(tipo) {
+  if (tipo === 'in') resultado.textContent = arbol.inOrden().join(', ');
+  if (tipo === 'pre') resultado.textContent = arbol.preOrden().join(', ');
+  if (tipo === 'post') resultado.textContent = arbol.postOrden().join(', ');
+}
+
+function dibujarNodo(nodo, x, y, espacio) {
+  if (!nodo) return;
+
+  ctx.beginPath();
+  ctx.arc(x, y, 20, 0, Math.PI * 2);
+  ctx.fillStyle = '#e3c1dc';
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#4a3058';
+  ctx.textAlign = "center";
+  ctx.font = "16px Montserrat";
+  ctx.fillText(nodo.valor, x, y + 5);
+
+  if (nodo.izquierda) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - espacio, y + 60);
+    ctx.stroke();
+    dibujarNodo(nodo.izquierda, x - espacio, y + 80, espacio / 1.5);
+  }
+  if (nodo.derecha) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + espacio, y + 60);
+    ctx.stroke();
+    dibujarNodo(nodo.derecha, x + espacio, y + 80, espacio / 1.5);
+  }
+}
+
+function dibujar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  dibujarNodo(arbol.raiz, canvas.width / 2, 40, 100);
+}
+</script>
+</body>
+</html>
